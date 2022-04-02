@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .row-header {
+    margin: 0px auto;
+    padding: 0px 0px; }
+
+  body {
+    padding: 50px 0px 0px 0px;
+    z-index: 0; }
+ 
+  .modal .modal-header {
+    background-color: #8F6BB9;
+    color: floralwhite; }
+    .modal .modal-header button {
+      color: floralwhite; }
+  
+  .modal .modal-body {
+    background-color: #D1C4E9; }
+
+    table {
+        width: 100%;
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    tr:nth-child(even) {
+        background-color: #eee;
+    }
+
+    tr:nth-child(odd) {
+        background-color: #fff;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 10px;
+
+    }
+    </style>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="styless.css">
+
+    <title>Leave Request</title>
+</head>
+
+<body style="background-color: #EEE4FA;">
+    <center><h3>Welcome, {{user.username}}</h3><small>({{user.user_details.dept}} {{user.user_details.role}})</small></center>
+    <a style="float:right" href="/logout">Logout</a> 
+    <hr style="color: blue;">
+    <div id="ApplyLmodal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" role="content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Apply for a Leave</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/home">
+                    {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="fromdate" class="col-md-2 col-form-label">From Date</label>
+                            <div class="col-md-4">
+                                <input type="date" placeholder="YYYY-MM-DD" class="form-control" id="date" name="date" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="guests" class="col-md-2 col-form-label">Number of Days</label>
+                            <div class="col-md-4">
+                                <input type="number" placeholder="Enter a number" class="form-control" id="day" name="no_of_days" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="feedback" class="col-md-2 col-form-label">Reason</label>
+                            <div class="col-md-10">
+                                <textarea class="form-control" placeholder="Enter text here.." id="feedback" name="reason" rows="12" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="offset-md-2 col-md-8">
+                                <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="row row-header">
+            <div class="col-auto col-sm align-self-center">
+                <a role="button" class="btn btn-block btn-warning" data-toggle="modal" data-target="#ApplyLmodal">Apply for a Leave</a>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="container">
+    <br><br><br>
+        <h5>Previous Leave Requests-</h5>
+        {% if faculty_details %}
+            <table>
+                <tr>
+                    <th>Date of Leave</th>
+                    <th>No. of days</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                </tr>
+                {% for row in faculty_details %}
+                <tr>
+                        <td>{{row.date_of_leave}}</td>
+                        <td>{{row.no_of_days}}</td>
+                        <td>{{row.reason}}</td>
+                        <td>{% if row.permission == -1 %}Pending {% elif row.permission == 0%}Accepted {% else %}Declined{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
